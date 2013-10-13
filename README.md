@@ -1,6 +1,8 @@
 Introduction
 ============
 
+You can see this running (if the AWS server is up) at http://whattogiveher.com.
+
 This used to work until Pinterest changed their entire site architecture. The current version uses an unofficial API since Pinterest doesn't have one yet. I'm not planning on working on this more until Pinterest releases an official API because I'm tired of rewriting it every time they change something.
 
 How it works
