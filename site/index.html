@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+  <head>
+
+
+    <meta charset="utf-8">
+    <title>What To Give Her</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }
+
+      /* Custom container */
+      .container-narrow {
+        margin: 0 auto;
+        max-width: 700px;
+      }
+      .container-narrow > hr {
+        margin: 30px 0;
+      }
+
+      /* Main marketing message and sign up button */
+      .jumbotron {
+        margin: 60px 0;
+        text-align: center;
+      }
+      .jumbotron h1 {
+        font-size: 72px;
+        line-height: 1;
+      }
+      .jumbotron .btn {
+        font-size: 21px;
+        padding: 14px 24px;
+      }
+
+      /* Supporting marketing content */
+      .marketing {
+        margin: 60px 0;
+      }
+      .marketing p + h4 {
+        margin-top: 28px;
+      }
+
+.masonry {
+  background: #FFF; /*EEE looks nice too */
+  max-width: 640px;
+}
+
+.masonry .item {
+  width:  150px;
+  height: 150px;
+  float: auto;
+  background: #FFF;
+  border: 2px solid #333;
+  border-color: hsla(0, 0%, 0%, 0.5);
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.container {
+  margin: 0 auto;
+}
+
+.item.w2 { width:  120px; }
+.item.w3 { width:  180px; }
+.item.w4 { width:  240px; }
+
+.item.h2 { height: 100px; }
+.item.h3 { height: 130px; }
+.item.h4 { height: 180px; }
+
+
+
+
+    </style>
+    <!--<link href= "css/bootstrap-responsive.css" rel="stylesheet"> -->
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    
+  </head>
+
+  <body>
+
+    <div class="container-narrow">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          
+        </ul>
+      </div>
+
+      <div class="jumbotron">
+        <h1>What To Give Her</h1>
+        <p class="lead">Find her the perfect gift by cheating with Pinterest.</p>
+
+	<input type="text" id="name" class="input-medium search-query" placeholder="Her Pinterest username"> <i class="icon-question-sign"></i>
+
+<br />
+<br />
+	<a class="btn btn-large btn-success" id="go" href="#">Start</a>
+<br />
+<br />    
+<div id="help" style="outline:#000000 solid thin;">
+<h3 style="text-align:center">How do I find her Pinterest username?</h3>
+1) Find her Pinterest page:
+<input type="text" id="findperson" class="input-medium search-query" placeholder="Her name"> <button type="button" id="pinterestsearch">Find on Pinterest</button>
+<br />
+<br />
+2) Look for the username in the URL, ie <b>http://pinterest.com/<i>username_here/</i></b>
+<br />
+<img src="img/pin.png">
+<br /> 
+<br />
+<div id="closehelp" style="font-weight:bold; text-decoration:underline; cursor:pointer;">Close</div>
+</div>
+<h2 id="progress" style="text-align:center">Loading data...</h2>
+
+<div id="results">
+
+</div>      
+
+
+
+      </div>
+<div class="masonry">
+
+</div>
+
+    </div> <!-- /container -->
+
+    <!-- Javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="js/masonry.min.js"></script>
+
+<script>
+	var url;
+	var username;
+  var primary_pins = new Array();
+  var friend1_pins = new Array();
+  var friend2_pins = new Array();
+  var friend3_pins = new Array();
+  var primary_buyable_pins = new Array();
+  var friend1_buyable_pins = new Array();
+  var friend2_buyable_pins = new Array();
+  var friend3_buyable_pins = new Array();
+
+	var sitelist = new Array();
+  sitelist[0] = "amazon.com";
+  sitelist[1] = "etsy.com";
+  sitelist[2] = "tobi.com";
+  sitelist[3] = "polyvore";
+  sitelist[4] = "wanelo.com";
+  sitelist[5] = "boohoo.com";
+  sitelist[6] = "ricketyrack.com";
+  sitelist[7] = "crazydogtshirts.com";
+  sitelist[8] = "revolveclothing.com";
+  sitelist[9] = "net-a-porter.com";
+  sitelist[10] = "ustrendy.com";
+  sitelist[11] = "esther.com.au";
+  sitelist[12] = "anthropologie.com";
+  sitelist[13] = "pacsun.com";
+  sitelist[14] = "nastygal.com";
+  sitelist[15] = "modcloth.com";
+  sitelist[16] = "joie.com";
+  sitelist[17] = "rstyle.me";
+  sitelist[18] = "thefancy.com";
+  sitelist[19] = "thinkgeek.com";
+  sitelist[20] = "zulily.com";
+  sitelist[21] = "emersonfry"; 
+  sitelist[22] = "lululemon.com";
+  sitelist[23] = "shopbop.com";
+  sitelist[24] = "asos.com";
+  sitelist[25] = "dressinmoda.com";
+  sitelist[26] = "threehipchicks.com";
+
+
+
+
+$("#progress").hide();
+$("#help").hide();
+////////////////////////////
+function YQLQuery(query, callback) {
+    this.query = query;
+    this.callback = callback || function(){};
+    this.fetch = function() {
+
+        if (!this.query || !this.callback) {
+            throw new Error('YQLQuery.fetch(): Parameters may be undefined');
+        }
+
+        var scriptEl = document.createElement('script'),
+            uid = 'yql' + +new Date(),
+            encodedQuery = encodeURIComponent(this.query.toLowerCase()),
+            instance = this;
+
+        YQLQuery[uid] = function(json) {
+            instance.callback(json);
+            delete YQLQuery[uid];
+            document.body.removeChild(scriptEl);
+        };
+
+        scriptEl.src = 'http://query.yahooapis.com/v1/public/yql?q='
+                     + encodedQuery + '&format=json&callback=YQLQuery.' + uid; 
+        document.body.appendChild(scriptEl);
+
+    };
+}
+/////////////////////
+
+$(".icon-question-sign").click(function(){
+
+  if($("#help").is(":hidden")){
+      $("#help").slideDown("slow");
+
+  } else {
+    $("#help").hide();
+}
+});
+
+
+$("#closehelp").click(function(){
+  $("#help").slideUp();
+});
+
+$("#pinterestsearch").click(function(){
+    var name = $("#findperson").val();
+    var searchurl = "http://pinterest.com/search/people/?q="+name
+    window.open(searchurl, '_blank');
+});
+
+
+	$("#go").click(function(){
+		$("#progress").show();
+		console.log("button pressed");
+		//console.log($("#name").val());
+		username = $("#name").val();
+		console.log(username);
+		url = "http://pinterestapi.co.uk/"+username+"/pins";
+		console.log(url);
+
+// Construct your query:
+var query = "select * from html where url='"+url+"' limit 1";
+
+// Callback from Primary pins
+var callback = function(data) {
+	//console.log(data.query.results.body.p);
+  primary_pins = jQuery.parseJSON(data.query.results.body.p);
+	//console.log(primary_pins.body);
+  for (var i=0; i<50; i++){
+    //console.log(primary_pins.body[i].domain);
+    for (var j=0; j<sitelist.length; j++){
+      if (primary_pins.body[i].domain == sitelist[j]){
+        console.log(primary_pins.body[i].domain);
+        primary_buyable_pins.push(primary_pins.body[i]); //Push that pin to the buyable list
+      }
+    }
+    
+  }
+  //Now we have the primary person's pins. Parse them and find top 3 interaction sources.
+
+  $("#progress").hide();
+  $(".jumbotron").slideUp(); //because .hide() is boring.    
+
+  //Now display the pins 
+/////////////////////////////////
+
+// create <div class="item"></div>
+function getItemElement() {
+  var elem = document.createElement('div');
+  var wRand = Math.random();
+  var hRand = Math.random();$('.container').masonry({ isFitWidth: true });
+  //var widthClass = wRand > 0.92 ? 'w4' : wRand > 0.8 ? 'w3' : wRand > 0.6 ? 'w2' : '';
+  //var heightClass = hRand > 0.85 ? 'h4' : hRand > 0.6 ? 'h3' : hRand > 0.35 ? 'h2' : '';
+  var widthClass = 'w';
+  var heightClass = 'h';
+  elem.className = 'item ' + widthClass + ' ' + heightClass;
+  return elem;
+}
+
+//docReady( function() {
+
+  var container = document.querySelector('.masonry');
+  var msnry = new Masonry( container, { //msnry is the masonry instance
+    columnWidth: 30
+    //gutter: 30
+  });
+
+    // create new item elements
+    var elems = [];
+    var fragment = document.createDocumentFragment();
+    for ( var i = 0; i < primary_buyable_pins.length; i++ ) {
+      var elem = getItemElement();
+      //insert data from pin
+      elem.innerHTML = elem.innerHTML + primary_buyable_pins[i].domain;
+      elem.innerHTML += "<img src='"+primary_buyable_pins[i].src+"'>";
+
+      fragment.appendChild( elem );
+      elems.push( elem );
+    }
+    // append elements to container
+    container.appendChild( fragment );
+    //$('.container').masonry({ isFitWidth: true });
+    // add and lay out newly appended elements
+    msnry.appended( elems );
+  //});
+
+//});
+
+
+////////////////////////////////////
+
+};
+
+// Instantiate with the query:
+var firstFeedItem = new YQLQuery(query, callback);
+
+// If you're ready then go:
+firstFeedItem.fetch(); // Go!!
+
+		
+});
+
+</script>
+
+
+  </body>
+</html>
+

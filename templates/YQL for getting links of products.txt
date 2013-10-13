@@ -1,0 +1,7 @@
+YQL for getting links of products:
+select * from html where url="http://pinterest.com/andypal/pins/?lazy=1&page=1" and xpath = "//div[@class='convo attribution clearfix']"
+
+YQL for getting pin IDs:
+select * from html where url="http://pinterest.com/andypal/pins/?lazy=1&page=1" and xpath = "//a[@class='PinImage ImgLink']"
+
+they're blocking direct image links, so I'll have to 
